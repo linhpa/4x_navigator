@@ -199,7 +199,21 @@ body {
 @endsection
 @section('content')
 <div class="uper">
-    <h2>Case List</h2>
+    <h2 style="text-align: center;">Case List</h2>
+    @if (session('error'))
+          <div class="alert alert-danger">
+              {{ session('error') }}
+          </div>
+      @endif
+      @if (session('success'))
+          <div class="alert alert-success">
+              {{ session('success') }}
+          </div>
+      @endif
+    <div style="text-align: center;">
+      <a href="{{ route('bsh_cases.create') }}"><button class="btn btn-success"><i class="fa fa-plus"></i> Create New Case</button></a>
+    </div>
+
     <!-- <table class="table table-bordered">
         <thead>
             <tr>
@@ -243,6 +257,12 @@ body {
           <div class="grid-row">
             @foreach($cases as $case)
             <div class="grid-item">
+              <!-- <i class="fa fa-4x fa-times-circle" style="
+                position: absolute;
+                top: 0;
+                right: 0;
+                z-index: 1;">                  
+              </i> -->
               <a class="wrapping-link" href="{{ url('bsh_cases/handle', $case->id)}}"></a>
               <div class="grid-item-wrapper">
                 <div class="grid-item-container">

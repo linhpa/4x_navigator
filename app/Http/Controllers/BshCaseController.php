@@ -34,21 +34,23 @@ class BshCaseController extends Controller
      */
     public function index(Request $request)
     {        
+        $statuses = $this->STATUSES;
+
         if (Auth::user()->role == 'admin') {
             if (isset($request->new) && $request->new == 1) {
                 $cases = BshCase::where('status', 1)->orWhere('status', null)->orWhere('status', 0)->orderBy('status', 'asc')->orderBy('updated_at', 'desc')->paginate(10);
             } else {
-                $cases = BshCase::find(1)->orderBy('status', 'asc')->orderBy('updated_at', 'desc')->paginate(10);    
+                $cases = BshCase::whereRaw('1')->orderBy('status', 'asc')->orderBy('updated_at', 'desc')->paginate(10);    
             }
+
+            return view('bshcase.index_admin', compact('cases', 'statuses'));
         } else {
             if (isset($request->new) && $request->new == 1) {
                 $cases = BshCase::where('user_id', Auth::user()->id)->where('status', 1)->orWhere('status', null)->orWhere('status', 0)->orderBy('status', 'asc')->orderBy('updated_at', 'desc')->paginate(10);
             } else {
                 $cases = BshCase::where('user_id', Auth::user()->id)->orderBy('status', 'asc')->orderBy('updated_at', 'desc')->paginate(10);
             }
-        }
-        
-        $statuses = $this->STATUSES;
+        }        
 
         return view('bshcase.index', compact('cases', 'statuses'));
     }
@@ -60,7 +62,7 @@ class BshCaseController extends Controller
      */
     public function create()
     {
-        
+        return view('bshcase.create');
     }
 
     /**
@@ -70,8 +72,22 @@ class BshCaseController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {
-        
+    {        
+        $result = $this->bshCase->create([
+            'customer_name' => $request->input('customer_name'),
+            'customer_phone' => $request->input('customer_phone'),
+            'user_id' => Auth::user()->id,
+            'case_id' => $request->input('case_id'),
+            'lat1' => $request->input('lat1'),
+            'lng1' => $request->input('lng1'),
+            'address1' => $request->input('address1'),
+            'lat2' => $request->input('lat2'),
+            'lng2' => $request->input('lng2'),
+            'address2' => $request->input('address2'),
+            'description' => $request->input('description')
+        ]);
+
+        return redirect('bsh_cases')->with("success","Case Created Successfully!");
     }
 
     /**
@@ -91,9 +107,10 @@ class BshCaseController extends Controller
      * @param  \App\BshCase  $bshCase
      * @return \Illuminate\Http\Response
      */
-    public function edit(BshCase $bshCase)
-    {        
-        
+    public function edit($id)
+    {                
+        $case = BshCase::find($id);
+        return view('bshcase.edit', compact('case'));
     }
 
     /**
@@ -104,8 +121,13 @@ class BshCaseController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, BshCase $bshCase)
-    {
-        //
+    {        
+        $bshCase->customer_name = $request->get('customer_name');
+        $bshCase->customer_phone = $request->get('customer_phone');
+        $bshCase->description = $request->get('description');
+        $bshCase->save();
+
+        return redirect('bsh_cases')->with('success', 'Case has been updated Successfully');
     }
 
     /**
@@ -116,7 +138,9 @@ class BshCaseController extends Controller
      */
     public function destroy(BshCase $bshCase)
     {
-        //
+        $bshCase->delete();
+
+        return redirect('bsh_cases')->with('success', 'Case has been deleted Successfully');
     }
 
     public function getCase(Request $request) {     
