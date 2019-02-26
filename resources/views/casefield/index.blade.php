@@ -6,7 +6,7 @@
 
 @section('content')
 <div class="uper">
-    <h2 style="text-align: center;">Case List</h2>
+    <h2 style="text-align: center;">Case Fields</h2>
     @if (session('error'))
         <div class="alert alert-danger">
             {{ session('error') }}
@@ -18,39 +18,39 @@
         </div>
     @endif
     <div>
-      <a href="{{ route('bsh_cases.create') }}"><button class="btn btn-success"><i class="fa fa-plus"></i> </button></a>
+      <a href=""><button class="btn btn-success"><i class="fa fa-plus"></i> </button></a>
     </div>
     <table class="table table-bordered">
         <thead>
             <tr>
-              <td>Case ID</td>
-              <td>Customer Name</td>
-              <td>Customer Phone</td>
-              <td>Address 1</td>
-              <td>Address 2</td>
+              <td>Key</td>
+              <td>Name</td>
               <td>Description</td>
+              <td>Position</td>
+              <td>Show on grid</td>
+              <td>Show on edit</td>
               <td>Created At</td>
               <td>Updated At</td>
               <td>Command</td>
             </tr>
         </thead>
         <tbody>
-            @foreach($cases as $case)
+            @foreach($caseFields as $caseField)
             <tr>
-                <td>{{@$case->id}}</td>
-                <td>{{@$case->customer_name}}</td>
-                <td>{{@$case->customer_phone}}</td>
-                <td>{{@$case->address1}}</td>
-                <td>{{@$case->address2}}</td>
-                <td>{{@$case->description}}</td>
-                <td>{{@$case->created_at}}</td>
-                <td>{{@$case->updated_at}}</td>
+                <td>{{@$caseField->key}}</td>
+                <td>{{@$caseField->name}}</td>
+                <td>{{@$caseField->description}}</td>
+                <td>{{@$caseField->position}}</td>
+                <td>{{@$caseField->on_grid}}</td>
+                <td>{{@$caseField->editable}}</td>
+                <td>{{@$caseField->created_at}}</td>
+                <td>{{@$caseField->updated_at}}</td>
                 <td>                    
-                    <a href="{{ route('bsh_cases.edit', $case->id) }}">
+                    <a href="{{ route('bsh_cases.edit', $caseField->id) }}">
                         <button class="btn btn-warning"><i class="fa fa-pencil"></i></button>
                     </a>
                     <div style="display: inline-block;">
-                    <form id="destroy-form" action="{{ route('bsh_cases.destroy', $case->id)}}" method="post">
+                    <form id="destroy-form" action="{{ route('bsh_cases.destroy', $caseField->id)}}" method="post">
                       {{ csrf_field() }}                      
                       <input name="_method" type="hidden" value="DELETE">
                       <button class="btn btn-danger" type="submit" onclick="return confirm('Are you sure you want to delete this case?');"><i class="fa fa-trash"></i></button>
@@ -62,7 +62,7 @@
         </tbody>
     </table>
     <div class="text-center">
-        {{ $cases->appends(Request::all())->links() }}
+        {{ $caseFields->appends(Request::all())->links() }}
     </div>
 </div>
 
