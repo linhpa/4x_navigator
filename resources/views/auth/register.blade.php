@@ -43,7 +43,7 @@
                             <label for="phone" class="col-md-4 control-label">Phone Number</label>
 
                             <div class="col-md-6">
-                                <input id="phone" type="text" class="form-control" name="phone" value="{{ old('phone') }}" required autofocus>
+                                <input id="phone" type="text" class="form-control" name="phone" value="{{ old('phone') }}" required>
 
                                 @if ($errors->has('phone'))
                                     <span class="help-block">
@@ -97,7 +97,7 @@
                             <label for="gdv_id" class="col-md-4 control-label">GDV ID</label>
 
                             <div class="col-md-6">
-                                <input id="gdv_id" type="text" class="form-control" name="gdv_id" value="{{ old('gdv_id') }}" required autofocus>
+                                <input id="gdv_id" type="text" class="form-control" name="gdv_id" value="{{ old('gdv_id') }}" required>
 
                                 @if ($errors->has('gdv_id'))
                                     <span class="help-block">

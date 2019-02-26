@@ -105,6 +105,7 @@ Route::group(['middleware' => ['auth']], function () {
 	]]);
 }); 	
 
-
+Route::get('2fa', 'TwoFactorController@showTwoFactorForm');
+Route::post('2fa', 'TwoFactorController@verifyTwoFactor');
 
 Route::get('/home', 'HomeController@index')->name('home');
