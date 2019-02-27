@@ -3,7 +3,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Auth;
-use Twilio;
+use Mail;
 
 class TwoFactorVerify
 {
@@ -23,11 +23,12 @@ class TwoFactorVerify
         } 
         
         $user->token_2fa = mt_rand(10000,99999);
-        $user->save();        
-        // This is the twilio way
-        Twilio::message($user->phone, '4X Nav App OTP: ' . $user->token_2fa);
-        // If you want to use email instead just 
-        // send an email to the user here ..
+        $user->save();                
+        
+         Mail::raw('4X_Nav_App OTP: ' . $user->token_2fa, function ($message) use ($user) {
+            $message->to($user->email);
+         });
+
         return redirect('/2fa');  
     }
 }
