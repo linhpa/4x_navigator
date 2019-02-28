@@ -4,22 +4,49 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Auth;
+use App\Device;
+use Jenssegers\Agent\Agent;
 
 class TwoFactorController extends Controller
 {
+	public function __construct() { 
+		$this->middleware('auth');
+	}
+
     public function verifyTwoFactor(Request $request)
     {
         // $request->validate([
         //     '2fa' => 'required',
         // ]);
 
-        if($request->input('2fa') == Auth::user()->token_2fa){            
-            $user = Auth::user();
-            $user->token_2fa_expiry = \Carbon\Carbon::now()->addMinutes(config('session.lifetime'));
-            $user->save();       
+        $user = Auth::user();
+
+        $device = Device::where([
+        	['user_id', '=', $user->id],
+        	['ip', '=', $_SERVER['REMOTE_ADDR']],
+        	['user_agent', '=', $_SERVER['HTTP_USER_AGENT']]            	
+        ])->first();
+        $attempts = ++$device->attempts;
+        $device->save();
+
+        if ($device->attempts > 4) {
+        	Auth::logout();
+        	$device->attempts = 0;
+        	$device->save();
+        	return redirect('/');
+        }
+
+        if($request->input('2fa') == $user->token_2fa && $user->token_2fa_expiry > \Carbon\Carbon::now()){            
+            // $user->token_2fa_expiry = \Carbon\Carbon::now()->addMinutes(config('session.lifetime'));
+            // $user->save();
+
+            $device->is_verified = true;
+            $device->attempts = 0;
+            $device->save();
+
             return redirect('/home');
         } else {
-            return redirect('/2fa')->with('error', 'Incorrect code.');
+            return view('auth.two_factor', compact('attempts'))->with('error', 'Incorrect or expired OTP.');
         }
     }
 
@@ -27,4 +54,20 @@ class TwoFactorController extends Controller
     {
         return view('auth.two_factor');
     }  
+
+    public function resendOTPEmail() {
+    	// $user = Auth::user();
+    	// $user->token_2fa = mt_rand(10000, 99999);
+     //    $user->token_2fa_expiry = \Carbon\Carbon::now()->addMinutes(10);
+     //    $user->save();
+
+    	$user = Auth::user();
+    	$agent = new Agent();
+
+    	Mail::raw("Login On New Device: " . $agent->browser() . ", " . $agent->platform() . ", " . $agent->device() . ". 4X_Nav_App OTP: $user->token_2fa", function ($message) use ($user) {
+            $message->to($user->email);
+        });
+
+        return redirect('/2fa')->with("success", "OTP resended susccessfully");
+    }
 }

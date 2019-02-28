@@ -58,26 +58,9 @@ Route::group(['middleware' => ['auth', 'admin']], function() {
 	  'as' => '',
 	  'uses' => 'Auth\RegisterController@register'
 	]);
-
-	Route::get('case_field', [
-		'as' => 'case_field',
-	  	'uses' => 'CaseFieldController@index'
-	]);
-	Route::post('case_field', [
-		'as' => 'case_field',
-	  	'uses' => 'CaseFieldController@store'
-	]);
-	Route::patch('case_field', [
-		'as' => 'case_field',
-	  	'uses' => 'CaseFieldController@update'
-	]);
-	Route::delete('case_field', [
-		'as' => 'case_field',
-	  	'uses' => 'CaseFieldController@destroy'
-	]);
 });
 
-Route::group(['middleware' => ['auth']], function () {
+Route::group(['middleware' => ['auth', 'two_factor']], function () {
 	Route::get('change_pw', [
 		'uses' => 'UserController@changePassword',
 		'as' => 'change_pw'
@@ -103,9 +86,10 @@ Route::group(['middleware' => ['auth']], function () {
 	Route::resource('users', 'UserController', ['except' => [
     	'create', 'store'
 	]]);
+
+	Route::get('/home', 'HomeController@index')->name('home');
 }); 	
 
 Route::get('2fa', 'TwoFactorController@showTwoFactorForm');
 Route::post('2fa', 'TwoFactorController@verifyTwoFactor');
-
-Route::get('/home', 'HomeController@index')->name('home');
+Route::post('2fa_resend', 'TwoFactorController@resendOTPEmail');

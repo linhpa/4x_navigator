@@ -80,7 +80,7 @@
             <div class="content">
                 <div class="title m-b-md">
                     <!-- BSH Navigator App -->
-                    <img src="{{ asset('images/Logo-BSH -w.jpg') }}" width="200px" height="100px">
+                    <img src="{{ asset('images/stellogo-2.png') }}" width="200px" height="100px">
                 </div>
 
                 <div class="links">
