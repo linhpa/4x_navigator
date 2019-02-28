@@ -30,6 +30,8 @@ class Kernel extends HttpKernel
             \App\Http\Middleware\EncryptCookies::class,
             \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
             \Illuminate\Session\Middleware\StartSession::class,
+            \App\Http\Middleware\RefreshRedis::class,
+            \App\Http\Middleware\UserLastActivity::class,
             // \Illuminate\Session\Middleware\AuthenticateSession::class,
             \Illuminate\View\Middleware\ShareErrorsFromSession::class,
             \App\Http\Middleware\VerifyCsrfToken::class,
@@ -59,5 +61,6 @@ class Kernel extends HttpKernel
         'jwt.auth' => \App\Http\Middleware\VerifyJWTToken::class,
         'admin' => \App\Http\Middleware\IsAdmin::class,
         'two_factor' => \App\Http\Middleware\TwoFactorVerify::class,
+        'ref_res_ss' => \App\Http\Middleware\RefreshRedis::class,
     ];
 }

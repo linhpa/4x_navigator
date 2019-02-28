@@ -53,6 +53,7 @@
                         @else
                             @if (Auth::user()->role == 'admin')                            
                             <li><a href="{{ route('users.index') }}">User Management</a></li>
+                            <li><a href="{{ url('monitor') }}">Monitor</a></li>
                             @endif
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">

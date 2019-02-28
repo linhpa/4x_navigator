@@ -49,7 +49,7 @@ Route::get('password/reset/{token}', [
 ]);
 
 // Registration Routes...
-Route::group(['middleware' => ['auth', 'admin']], function() {
+Route::group(['middleware' => ['auth', 'two_factor', 'admin']], function() {
 	Route::get('register', [
 	  'as' => 'register',
 	  'uses' => 'Auth\RegisterController@showRegistrationForm'
@@ -57,6 +57,10 @@ Route::group(['middleware' => ['auth', 'admin']], function() {
 	Route::post('register', [
 	  'as' => '',
 	  'uses' => 'Auth\RegisterController@register'
+	]);
+
+	Route::get('monitor', [
+		'uses' => 'MonitorController@index'
 	]);
 });
 

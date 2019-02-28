@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 //use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use App\Http\Controllers\Auth\mAuthenticatesUsers;
 use Auth;
+use Illuminate\Support\Facades\Redis;
+use Illuminate\Http\Request;
 
 class LoginController extends Controller
 {
@@ -44,6 +46,30 @@ class LoginController extends Controller
         $user = Auth::user();
         $user->token_2fa_expiry = \Carbon\Carbon::now();
         $user->save();
+
+        $expire = config('session.lifetime') * 60;
+
+        // Setting redis using id as namespace and value
+        $id = $user->id;
+        Redis::SET('users:' . $id, $id);
+        Redis::EXPIRE('users:' . $id, $expire);
+
         return redirect('/home');
+    }
+
+    //@override
+    public function logout(Request $request)
+    {
+        // Deleting user from redis database when they log out
+        $id = Auth::user()->id;
+        Redis::DEL('users:'.$id);
+
+        $this->guard()->logout();
+
+        $request->session()->invalidate();
+        $request->session()->flush();
+        $request->session()->regenerate();
+
+        return redirect('/');
     }
 }
