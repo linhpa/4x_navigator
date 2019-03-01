@@ -217,7 +217,7 @@ body {
           <div class="grid-row">
             @foreach($cases as $case)
             <div class="grid-item">
-              <a class="wrapping-link" href="{{ url('bsh_cases/handle', $case->id)}}"></a>
+              <a class="wrapping-link" href="{{ url('bsh_cases/handle', $case->id)}}" @if($case->status != 2 && $case->status != 3) onclick="return confirm('Are you sure to take this case?')"> @endif </a>
               <div class="grid-item-wrapper">
                 <div class="grid-item-container">
                   <div class="grid-image-top pending-case">
@@ -226,10 +226,8 @@ body {
                   <div class="grid-item-content">
                     <span class="item-title">Case ID: {{ @$case->id }}</span>
                     <span class="item-category">{{ @$case->description }}</span>
-                    <span class="item-excerpt">Address: {{ @$case->address2 }}</span>
-                    @if (!isset($case->address2))
-                    <span class="item-excerpt">Address: {{ @$case->address1 }}</span>
-                    @endif                    
+                    <span class="item-excerpt">Address 1: {{ @$case->address1 }}</span>
+                    <span class="item-excerpt">Address 2: {{ @$case->address2 }}</span>                 
                   </div>
                 </div>
               </div>
@@ -247,7 +245,5 @@ body {
 @endsection
 
 @section('javascript')
-$('.wrapping-link').on('click', (e) {
-  
-})
+
 @endsection

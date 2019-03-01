@@ -87,7 +87,32 @@ class BshCaseController extends Controller
             'description' => $request->input('description')
         ]);
 
+        $this->storeCaseTo4xServer($result);
+
         return redirect('bsh_cases')->with("success","Case Created Successfully!");
+    }
+
+    protected function storeCaseTo4xServer(BshCase $case) {
+        if (!$case instanceof BshCase) {
+            return false;
+        }
+
+        $client = new Client();
+
+        $data = [
+            'case_id' => $case->id,
+            'gdv_id' => $case->gdv_id,
+            'customer_phone' => $case->customer_phone,
+            'customer_name' => $case->customer_name,
+            'description' => $case->description,
+            'secret_key' => Config::getSecretKey(),
+        ];
+
+        $response = $client->post('http://115.146.126.84/api/locationServices/saveNewCase', [
+            'form_params' => $data
+        ]);
+
+        return response()->json(['result' => $response]);
     }
 
     /**

@@ -4,7 +4,11 @@
 
 <style>
   .uper {
-    margin-top: 40px;
+    margin: 20px;
+  }
+
+  .text-form-input {
+    width: 40%;
   }
 </style>
 
@@ -30,16 +34,17 @@
           <div class="form-group">
               {{ csrf_field() }}
               <label for="description">Description:</label>
-              <input type="text" class="form-control" name="description"/>
+              <input type="text" class="form-control text-form-input" name="description"/>
           </div>
           <div class="form-group">
               <label for="customer_name">Customer name :</label>
-              <input type="text" class="form-control" name="customer_name"/>
+              <input type="text" class="form-control text-form-input" name="customer_name"/>
           </div>
           <div class="form-group">
               <label for="customer_phone">Customer phone number:</label>
-              <input type="text" class="form-control" name="customer_phone"/>
+              <input type="text" class="form-control text-form-input" name="customer_phone"/>
           </div>
+          <a href="{{ url()->previous() }}"><button class="btn">Exit</button></a>
           <button type="submit" class="btn btn-primary">Add</button>
       </form>
   </div>

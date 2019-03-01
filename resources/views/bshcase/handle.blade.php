@@ -722,7 +722,7 @@ var apiGeolocationSuccess = function(position) {
 
     window.customerLocation = new google.maps.LatLng(parseFloat({{ @$case->lat2 }}), parseFloat({{ @$case->lng2 }}))
 
-    @if (!isset($case->lat2) || $case->lat2 == null) 
+    @if ((!isset($case->lat2) || $case->lat2 == null) && (isset($case->lat1) && $case->lat1 != null))
     markers.push(new google.maps.Marker({          
         icon: '{{ asset('images/cust_location.png') }}',
         title: 'Customer Position 1',
@@ -797,24 +797,24 @@ if ("{{ !Auth::guest() }}" == "1") {
     window.intervalGetLocation = setInterval(getGDVLocation, 10 * 1000)
 }     
 
-$.post({
-    url: '{{ url('bsh_cases/getGDVLocation') }}',
-    dataType: 'json',
-    data: {
-        _token: '{{ csrf_token() }}',
-        gdv_id: '{{ @$case->user->gdv_id }}',            
-    },
-    success: (data) => {
-        if (data.data) {
-            let position = data.data.position
-            apiGeolocationSuccess(position)
-            checkDistance(position.coords.latitude, position.coords.longitude)
-        }
-    },
-    error: (xhr) => {
-        alert('Error')
-    }
-})
+// $.post({
+//     url: '{{ url('bsh_cases/getGDVLocation') }}',
+//     dataType: 'json',
+//     data: {
+//         _token: '{{ csrf_token() }}',
+//         gdv_id: '{{ @$case->user->gdv_id }}',            
+//     },
+//     success: (data) => {
+//         if (data.data) {
+//             let position = data.data.position
+//             apiGeolocationSuccess(position)
+//             checkDistance(position.coords.latitude, position.coords.longitude)
+//         }
+//     },
+//     error: (xhr) => {
+//         console.log('Error')
+//     }
+// })
 
 function getGDVLocation() {
     $.post({
@@ -833,10 +833,12 @@ function getGDVLocation() {
             }
         },
         error: (xhr) => {
-            alert('Error')
+            console.log('Error')
         }
     })
 }
+
+getGDVLocation()
 
 function updateGDVMarker(position) {
     let lat = position.coords.latitude, lng = position.coords.longitude
