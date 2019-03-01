@@ -10,7 +10,7 @@
 
 @section('content')
 <div class="uper">
-    <h2 style="text-align: center;">User List</h2>
+    <h2 style="text-align: center;">Monitor</h2>
     @if (session('error'))
         <div class="alert alert-danger">
             {{ session('error') }}

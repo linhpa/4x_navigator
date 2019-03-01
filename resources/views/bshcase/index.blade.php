@@ -213,66 +213,13 @@ body {
     <div style="text-align: center;">
       <a href="{{ route('bsh_cases.create') }}"><button class="btn btn-success"><i class="fa fa-plus"></i> Create New Case</button></a>
     </div>
-
-    <!-- <table class="table table-bordered">
-        <thead>
-            <tr>
-                
-                <td>Name</td>
-                <td>Phone</td>
-                <td>Agent</td>
-                <td>Address 1</td>
-                <td>Address 2</td>
-                <td>Updated At</td>
-                <td>Status</td>
-                <td colspan="2">Action</td>
-            </tr>
-        </thead>   
-        <tbody>
-            @foreach($cases as $case)
-            <tr>
-                
-                <td>{{@$case->customer_name}}</td>
-                <td>{{@$case->customer_phone}}</td>
-                <td>{{@$case->user->name}}</td>
-                <td>{{@$case->address1}}</td>
-                <td>{{@$case->address2}}</td>
-                <td>{{@$case->updated_at}}</td>
-                <td>{{@$statuses[$case->status] ?: 'New'}}</td>
-                <td>
-                    <a href="{{ url('bsh_cases/handle', $case->id)}}" class="btn btn-primary">
-                        @if ($case->status == 3 || $case->status == 2) 
-                        Edit
-                        @else
-                        Take Case
-                        @endif
-                    </a>
-                </td>
-            </tr>
-            @endforeach
-        </tbody>
-    </table> -->
-
         <div class="container">
           <div class="grid-row">
             @foreach($cases as $case)
             <div class="grid-item">
-              <!-- <i class="fa fa-4x fa-times-circle" style="
-                position: absolute;
-                top: 0;
-                right: 0;
-                z-index: 1;">                  
-              </i> -->
               <a class="wrapping-link" href="{{ url('bsh_cases/handle', $case->id)}}"></a>
               <div class="grid-item-wrapper">
                 <div class="grid-item-container">
-                  <!-- @if (@$case->status == 3)
-                  <div class="grid-image-top done-case">
-                  @elseif (@$case->status == 2)         
-                  <div class="grid-image-top pending-case">         
-                  @else
-                  <div class="grid-image-top new-case">
-                  @endif -->
                   <div class="grid-image-top pending-case">
                     <span class="centered">{{@$case->customer_name}} -- {{@$case->customer_phone}}</span>
                   </div>
@@ -297,4 +244,10 @@ body {
     </div>
 </div>
 
+@endsection
+
+@section('javascript')
+$('.wrapping-link').on('click', (e) {
+  
+})
 @endsection

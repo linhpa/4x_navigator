@@ -6,6 +6,7 @@ use Auth;
 use Mail;
 use App\Device;
 use Jenssegers\Agent\Agent;
+use App\Mail\OTP;
 
 class TwoFactorVerify
 {
@@ -43,7 +44,7 @@ class TwoFactorVerify
                 'user_agent' => $_SERVER['HTTP_USER_AGENT'],
                 'platform' => $agent->platform(),
                 'device_name' => $agent->device(),
-                'browser' => $agent->browser(),                            
+                'browser' => $agent->browser(),
             ]);
         }
         
@@ -51,9 +52,11 @@ class TwoFactorVerify
         $user->token_2fa_expiry = \Carbon\Carbon::now()->addMinutes(10);
         $user->save();
         
-        Mail::raw("Login On New Device: " . $agent->browser() . ", " . $agent->platform() . ", " . $agent->device() . ". 4X_Nav_App OTP: $user->token_2fa", function ($message) use ($user) {
-            $message->to($user->email);
-        });
+        // Mail::raw("Login On New Device: " . $agent->browser() . ", " . $agent->platform() . ", " . $agent->device() . ". 4X_Nav_App OTP: $user->token_2fa", function ($message) use ($user) {
+        //     $message->to($user->email);
+        // });
+
+        Mail::to($user->email)->queue(new OTP($user));
 
         return redirect('/2fa');  
     }

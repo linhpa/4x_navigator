@@ -14,7 +14,7 @@ class AddColLastActivity extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->timestamp('last_activity');
+            $table->timestamp('last_activity')->nullable();
         });
     }
 

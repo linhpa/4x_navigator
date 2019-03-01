@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use Auth;
 use App\Device;
 use Jenssegers\Agent\Agent;
+use Mail;
+use App\Mail\OTP;
 
 class TwoFactorController extends Controller
 {
@@ -56,17 +58,14 @@ class TwoFactorController extends Controller
     }  
 
     public function resendOTPEmail() {
-    	// $user = Auth::user();
-    	// $user->token_2fa = mt_rand(10000, 99999);
-     //    $user->token_2fa_expiry = \Carbon\Carbon::now()->addMinutes(10);
-     //    $user->save();
-
     	$user = Auth::user();
     	$agent = new Agent();
 
-    	Mail::raw("Login On New Device: " . $agent->browser() . ", " . $agent->platform() . ", " . $agent->device() . ". 4X_Nav_App OTP: $user->token_2fa", function ($message) use ($user) {
-            $message->to($user->email);
-        });
+    	// Mail::raw("Login On New Device: " . $agent->browser() . ", " . $agent->platform() . ", " . $agent->device() . ". 4X_Nav_App OTP: $user->token_2fa", function ($message) use ($user) {
+     //        $message->to($user->email);
+     //    });
+
+        Mail::to($user->email)->queue(new OTP($user));
 
         return redirect('/2fa')->with("success", "OTP resended susccessfully");
     }
