@@ -87,7 +87,12 @@ class BshCaseController extends Controller
             'description' => $request->input('description')
         ]);
 
-        $this->storeCaseTo4xServer($result);
+        $res = $this->storeCaseTo4xServer($result);
+
+        if (!$res) {
+            return redirect('bsh_cases')->with("error","Cannot synchronize Case to server!");
+            $result->delete();
+        }
 
         return redirect('bsh_cases')->with("success","Case Created Successfully!");
     }
@@ -101,18 +106,40 @@ class BshCaseController extends Controller
 
         $data = [
             'case_id' => $case->id,
-            'gdv_id' => $case->gdv_id,
+            'gdv_id' => $case->user->gdv_id,
             'customer_phone' => $case->customer_phone,
             'customer_name' => $case->customer_name,
             'description' => $case->description,
             'secret_key' => Config::getSecretKey(),
         ];
 
-        $response = $client->post('http://115.146.126.84/api/locationServices/saveNewCase', [
+        // $response = $client->post('http://115.146.126.84/api/locationServices/saveNewCase', [
+        //     'form_params' => $data
+        // ]);
+
+        $request = new \GuzzleHttp\Psr7\Request('POST', 'http://115.146.126.84/api/locationServices/saveNewCase', [
             'form_params' => $data
         ]);
+        $promise = $client->sendAsync($request)->then(function ($response) {
+            echo 'I completed! ' . $response->getBody();
+        });
+        $promise->wait();        
+        exit;
 
-        return response()->json(['result' => $response]);
+        // try {
+        //     $request = new \GuzzleHttp\Psr7\Request('POST', 'http://115.146.126.84/api/locationServices/saveNewCase', [
+        //         'form_params' => $data
+        //     ]);
+        //     $promise = $client->sendAsync($request)->then(function ($response) {
+        //         echo 'I completed! ' . $response->getBody();
+        //     });
+        //     $promise->wait();        
+        //     exit;
+        // } catch (RequestException $e) {
+        //     return false;
+        // }
+
+        return true;
     }
 
     /**

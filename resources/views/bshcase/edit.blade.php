@@ -4,7 +4,7 @@
 
 <style>
   .uper {
-    margin-top: 40px;
+    margin: 20px;
   }
 </style>
 

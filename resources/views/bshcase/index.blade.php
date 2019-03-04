@@ -245,5 +245,13 @@ body {
 @endsection
 
 @section('javascript')
+<script type="text/javascript">
+  async function takeCase(e) {
+    let confirm = await confirm('Are you sure to take this case?')
 
+    if (confirm) {
+      window.location.href = "{{ url('bsh_cases/handle', $case->id) }}"
+    }
+  }
+</script>
 @endsection

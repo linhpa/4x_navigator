@@ -241,7 +241,7 @@
                 </div>
                 <div class="row">
                     <div class="col-xs-12">
-                        <button class="btn btn-primary btn-lg btn-block next" id="confirmArrived" style="display: none">Confirm Arrival<!-- <span class="glyphicon glyphicon-chevron-right"></span> --></button>
+                        <button class="btn btn-primary btn-lg btn-block next" id="confirmArrived">Confirm Arrival<!-- <span class="glyphicon glyphicon-chevron-right"></span> --></button>
                     </div>
                 </div>
             </div>
@@ -792,10 +792,12 @@ var tryGeolocation = function() {
       {maximumAge: 50000, timeout: 20000, enableHighAccuracy: true});
   }
 };
+@if ($case->lat1 !== null & $case->lat2 !== null)
 if ("{{ !Auth::guest() }}" == "1") {
     //tryGeolocation();    
     window.intervalGetLocation = setInterval(getGDVLocation, 10 * 1000)
-}     
+}   
+@endif  
 
 // $.post({
 //     url: '{{ url('bsh_cases/getGDVLocation') }}',
@@ -828,8 +830,10 @@ function getGDVLocation() {
             if (data.data) {
                 let position = data.data.position
                 //apiGeolocationSuccess(position)
-                checkDistance(position.coords.latitude, position.coords.longitude)
-                updateGDVMarker(position)
+                if (position) {
+                  checkDistance(position.coords.latitude, position.coords.longitude)
+                  updateGDVMarker(position)  
+                }                
             }
         },
         error: (xhr) => {
