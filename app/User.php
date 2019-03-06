@@ -29,7 +29,7 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
 
-    protected $dates = ['deleted_at'];
+    protected $dates = ['deleted_at', 'last_activity'];
 
     public function cases() {
         return $this->hasMany('App\Case');

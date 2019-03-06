@@ -30,7 +30,7 @@
         </ul>
       </div><br />
     @endif
-      <form method="post" action="{{ route('bsh_cases.store') }}">
+      <form method="post" action="{{ route('bsh_cases.store') }}" style="display: inline;">
           <div class="form-group">
               {{ csrf_field() }}
               <label for="description">Description:</label>
@@ -43,10 +43,10 @@
           <div class="form-group">
               <label for="customer_phone">Customer phone number:</label>
               <input type="text" class="form-control text-form-input" name="customer_phone"/>
-          </div>
-          <a href="{{ url()->previous() }}"><button class="btn">Exit</button></a>
+          </div>          
           <button type="submit" class="btn btn-primary">Add</button>
       </form>
+      <a href="{{ route('bsh_cases.index') }}" style="display: inline;"><button class="btn">Exit</button></a>
   </div>
 </div>
 

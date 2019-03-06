@@ -46,7 +46,7 @@ class BshCaseController extends Controller
             return view('bshcase.index_admin', compact('cases', 'statuses'));
         } else {
             if (isset($request->new) && $request->new == 1) {
-                $cases = BshCase::where('user_id', Auth::user()->id)->where('status', 1)->orWhere('status', null)->orWhere('status', 0)->orderBy('status', 'asc')->orderBy('updated_at', 'desc')->paginate(10);
+                $cases = BshCase::where('user_id', Auth::user()->id)->whereRaw('(status = 1 or status is null or status = 0)')->orderBy('updated_at', 'desc')->paginate(10);
             } else {
                 $cases = BshCase::where('user_id', Auth::user()->id)->orderBy('status', 'asc')->orderBy('updated_at', 'desc')->paginate(10);
             }
@@ -77,7 +77,7 @@ class BshCaseController extends Controller
             'customer_name' => $request->input('customer_name'),
             'customer_phone' => $request->input('customer_phone'),
             'user_id' => Auth::user()->id,
-            'case_id' => $request->input('case_id'),
+            //'case_id' => $request->input('case_id'),
             'lat1' => $request->input('lat1'),
             'lng1' => $request->input('lng1'),
             'address1' => $request->input('address1'),
@@ -92,9 +92,12 @@ class BshCaseController extends Controller
         if (!$res) {
             return redirect('bsh_cases')->with("error","Cannot synchronize Case to server!");
             $result->delete();
+        } else {
+            $result->case_id = $res->_id;
+            $result->save();
         }
 
-        return redirect('bsh_cases')->with("success","Case Created Successfully!");
+        return redirect('bsh_cases')->with("success", "Case Created Successfully!");
     }
 
     protected function storeCaseTo4xServer(BshCase $case) {
@@ -113,33 +116,15 @@ class BshCaseController extends Controller
             'secret_key' => Config::getSecretKey(),
         ];
 
-        // $response = $client->post('http://115.146.126.84/api/locationServices/saveNewCase', [
-        //     'form_params' => $data
-        // ]);
+        try {
+            $response = $client->post(config('api_4x') . 'saveNewCase', [
+                'form_params' => $data
+            ]);    
 
-        $request = new \GuzzleHttp\Psr7\Request('POST', 'http://115.146.126.84/api/locationServices/saveNewCase', [
-            'form_params' => $data
-        ]);
-        $promise = $client->sendAsync($request)->then(function ($response) {
-            echo 'I completed! ' . $response->getBody();
-        });
-        $promise->wait();        
-        exit;
-
-        // try {
-        //     $request = new \GuzzleHttp\Psr7\Request('POST', 'http://115.146.126.84/api/locationServices/saveNewCase', [
-        //         'form_params' => $data
-        //     ]);
-        //     $promise = $client->sendAsync($request)->then(function ($response) {
-        //         echo 'I completed! ' . $response->getBody();
-        //     });
-        //     $promise->wait();        
-        //     exit;
-        // } catch (RequestException $e) {
-        //     return false;
-        // }
-
-        return true;
+            return json_decode((string)$response->getBody());
+        } catch (RequestException $e) {
+            return false;
+        }
     }
 
     /**
@@ -248,7 +233,20 @@ class BshCaseController extends Controller
     }
 
     public function showHandleCase($id) {
+        $user = Auth::user();
         $case = BshCase::where('id', $id)->first();
+        
+        if ($user->role != 'admin' && $case->status != 2 && $case->status != 3) {
+            $case->status = 2;
+            $case->save();
+        }
+
+        $data['secret_key'] = Config::getSecretKey();
+
+        $client = new Client();
+        $response = $client->post(config('app.api_4x') . 'takeCase', [
+            'form_params' => $data
+        ]);
 
         $photos1 = DB::table('case_photos')->where(['case_id' => $case->id, 'type' => 1])->get();
         $photos2 = DB::table('case_photos')->where(['case_id' => $case->id, 'type' => 2])->get();
@@ -348,7 +346,7 @@ class BshCaseController extends Controller
     protected function callApiSendLocation($data) {
         $client = new Client();
 
-        $response = $client->post('http://115.146.126.84/api/locationServices/pushGDVLocation', [
+        $response = $client->post(config('api_4x') . 'pushGDVLocation', [
             'form_params' => $data
         ]);
 
@@ -356,7 +354,7 @@ class BshCaseController extends Controller
 
         // $curl = curl_init();
         // curl_setopt_array($curl, array(
-        //     CURLOPT_URL => 'http://115.146.126.84/api/locationServices/pushGDVLocation',
+        //     CURLOPT_URL => config('api_4x') . 'pushGDVLocation',
         //     CURLOPT_RETURNTRANSFER => true,
         //     CURLOPT_ENCODING => "",
         //     CURLOPT_MAXREDIRS => 10,
@@ -408,7 +406,7 @@ class BshCaseController extends Controller
     protected function pushNoti($data) {
         $client = new Client();
 
-        $response = $client->post('http://115.146.126.84/api/locationServices/pushNoti', [
+        $response = $client->post(config('api_4x') . 'pushNoti', [
             'form_params' => $data
         ]);
 
@@ -440,7 +438,7 @@ class BshCaseController extends Controller
 
         $client = new Client();
 
-        $response = $client->post('http://115.146.126.84/api/locationServices/saveDoneCase', [
+        $response = $client->post(config('api_4x') . 'saveDoneCase', [
             'form_params' => $data
         ]);
 
@@ -458,7 +456,7 @@ class BshCaseController extends Controller
             try {
                 $client = new Client();            
 
-                $response = $client->post('http://115.146.126.84/api/locationServices/getGDVLocation', [
+                $response = $client->post(config('api_4x') . 'getGDVLocation', [
                     'form_params' => $data
                 ]);                
             } catch (RequestException $e) {                

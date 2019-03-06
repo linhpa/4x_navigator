@@ -217,7 +217,7 @@ body {
           <div class="grid-row">
             @foreach($cases as $case)
             <div class="grid-item">
-              <a class="wrapping-link" href="{{ url('bsh_cases/handle', $case->id)}}" @if($case->status != 2 && $case->status != 3) onclick="return confirm('Are you sure to take this case?')"> @endif </a>
+              <a class="wrapping-link" href="{{ url('bsh_cases/handle', $case->id)}}" @if($case->status != 2 && $case->status != 3) onclick="return confirm('Are you sure to take this case?')" @endif> </a>
               <div class="grid-item-wrapper">
                 <div class="grid-item-container">
                   <div class="grid-image-top pending-case">
@@ -246,12 +246,6 @@ body {
 
 @section('javascript')
 <script type="text/javascript">
-  async function takeCase(e) {
-    let confirm = await confirm('Are you sure to take this case?')
-
-    if (confirm) {
-      window.location.href = "{{ url('bsh_cases/handle', $case->id) }}"
-    }
-  }
+  
 </script>
 @endsection

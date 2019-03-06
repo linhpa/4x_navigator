@@ -38,7 +38,7 @@
             {{ session('success') }}
         </div>
     @endif
-      <form method="post" action="{{ route('users.update', $user->id) }}">
+      <form method="post" action="{{ route('users.update', $user->id) }}" style="display: inline;">
         {{ csrf_field() }}
         <input name="_method" type="hidden" value="PATCH">
         <div class="form-group">
@@ -67,6 +67,7 @@
         </div>
         <button type="submit" class="btn btn-primary">Update</button>
       </form>
+      <a href="{{ url()->previous() }}" style="display: inline;"><button class="btn">Exit</button></a>
   </div>
 </div>
 @endsection

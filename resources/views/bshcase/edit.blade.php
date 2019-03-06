@@ -6,6 +6,10 @@
   .uper {
     margin: 20px;
   }
+
+  .text-form-input {
+    width: 40%;
+  }
 </style>
 
 @endsection
@@ -30,23 +34,24 @@
             {{ session('success') }}
         </div>
     @endif
-      <form method="post" action="{{ route('bsh_cases.update', $case->id) }}">
+      <form method="post" action="{{ route('bsh_cases.update', $case->id) }}" style="display: inline;">
         {{ csrf_field() }}
         <input name="_method" type="hidden" value="PATCH">
         <div class="form-group">
           <label for="customer_name">Customer Name: </label>
-          <input type="text" class="form-control" name="customer_name" value="{{ $case->customer_name }}"  />
+          <input type="text" class="form-control text-form-input" name="customer_name" value="{{ $case->customer_name }}"  />
         </div>
         <div class="form-group">
           <label for="customer_phone">Customer Phone :</label>
-          <input type="text" class="form-control" name="customer_phone" value="{{ $case->customer_phone }}" />
+          <input type="text" class="form-control text-form-input" name="customer_phone" value="{{ $case->customer_phone }}" />
         </div>
         <div class="form-group">
           <label for="description">Description:</label>
-          <input type="text" class="form-control" name="description" value="{{ $case->description }}" />
+          <input type="text" class="form-control text-form-input" name="description" value="{{ $case->description }}" />
         </div>
         <button type="submit" class="btn btn-primary">Update</button>
       </form>
+      <a href="{{ route('bsh_cases.index') }}" style="display: inline;"><button class="btn">Exit</button></a>
   </div>
 </div>
 @endsection

@@ -233,4 +233,6 @@ return [
 
     ],
 
+    'api_4x' => env('API_4X'),
+
 ];
