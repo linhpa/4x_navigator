@@ -54,6 +54,8 @@ class LoginController extends Controller
         Redis::SET('users:' . $id, $id);
         Redis::EXPIRE('users:' . $id, $expire);
 
+        event(new \App\Events\LoginEvent($user, 'Authentication', 'Logged in'));
+
         return redirect('/home');
     }
 
@@ -63,6 +65,8 @@ class LoginController extends Controller
         // Deleting user from redis database when they log out
         $id = Auth::user()->id;
         Redis::DEL('users:'.$id);
+
+        event(new \App\Events\LoginEvent(Auth::user(), 'Authentication', 'Logged out'));
 
         $this->guard()->logout();
 

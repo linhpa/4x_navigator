@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Observers\BshCaseObserver;
 
 class BshCase extends Model
 {
@@ -17,4 +18,9 @@ class BshCase extends Model
     public function user() {
     	return $this->belongsTo('App\User');
     }
+
+    protected $events = [
+	    'updated'  => BshCaseObserver::class,
+	    'created'    => BshCaseObserver::class,
+	];
 }
