@@ -67,6 +67,6 @@ class TwoFactorController extends Controller
 
         Mail::to($user->email)->queue(new OTP($user));
 
-        return redirect('/2fa')->with("success", "OTP resended susccessfully");
+        return redirect('/2fa')->with("success", "OTP has been resent susccessfully");
     }
 }

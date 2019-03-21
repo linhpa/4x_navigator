@@ -28,9 +28,9 @@
 			                        {{ session('error') }}
 			                    </div>
 			                @endif		                	
-		                    @if (session('status'))
+		                    @if (session('success'))
 		                        <div class="alert alert-success">
-		                            {{ session('status') }}
+		                            {{ session('success') }}
 		                        </div>
 		                    @endif
 							<form role="form" method="POST" action="/2fa">
@@ -49,17 +49,17 @@
 									@endif
 								</div>
 								<div class="form-group">
+									<button class="btn btn-primary" type="submit">Send</button>
 									<a href="{{ route('logout') }}"
                                             onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
                                         <button class="btn">Exit</button>                                      
-                                    </a>                                    
-									<button class="btn btn-primary" type="submit">Send</button>
+                                    </a>
 								</div>								
 							</form>
 							<form role="form" method="POST" action="/2fa_resend">
 								{{ csrf_field() }}
-								<input type="submit" value="Haven't received OTP email? Request new email" style="background:none; border-width:0px; color:blue; text-decoration:underline;" />
+								<input id="resend-btn" type="submit" value="Haven't received OTP email? Request new email" style="background:none; border-width:0px; color:blue; text-decoration:underline;" />
 							</form>
 							<form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                                 {{ csrf_field() }}
@@ -70,4 +70,8 @@
 		    </div>
 		</div>
 	</body>
+	<script src="{{ asset('/js/app.js') }}"></script>    
+	<script type="text/javascript">
+		
+	</script>
 </html>
