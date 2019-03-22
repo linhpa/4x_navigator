@@ -8,6 +8,7 @@ use JWTAuth;
 use JWTAuthException;
 use Hash;
 use Auth;
+use Illuminate\Support\Facades\Redis;
 
 class UserController extends Controller
 {
@@ -125,5 +126,17 @@ class UserController extends Controller
         $user->password = bcrypt($request->get('password'));
         $user->save();
         return redirect()->back()->with("success","Password changed successfully !");
+    }
+
+    public function setUsersAvailability(Request $request) {
+        if (!isset($request->availability)) {
+            return response()->json(['succes' => false]);
+        }
+
+        $user = Auth::user();
+
+        Redis::SET("users:" . $user->id, $request->availability);
+
+        return response()->json(['succes' => true]);
     }
 }

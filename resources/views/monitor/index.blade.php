@@ -30,6 +30,7 @@
               <td>Phone</td>
               <td>Role</td>
               <td>Status</td>
+              <td>Availability</td>
               <td>Last Activity</td>
             </tr>
         </thead>
@@ -42,9 +43,15 @@
                 <td>{{@$user->phone}}</td>
                 <td>{{@$user->role}}</td>
                 @if (in_array($user->id, $loggedIds))
-                <td><span class="label label-success">Available</span></td>
+                <td><span class="label label-success">Online</span></td>
                 @else
                 <td><span class="label label-danger">Offline</span></td>
+                @endif
+
+                @if (in_array($user->id, $availableIds))
+                <td><span class="label label-success">Available</span></td>
+                @else
+                <td><span class="label label-danger">Unavailable</span></td>
                 @endif
                 <td>{{@$user->last_activity}}</td>
             </tr>

@@ -51,7 +51,7 @@ class LoginController extends Controller
 
         // Setting redis using id as namespace and value
         $id = $user->id;
-        Redis::SET('users:' . $id, $id);
+        Redis::SET('users:' . $id, 1);
         Redis::EXPIRE('users:' . $id, $expire);
 
         event(new \App\Events\LoginEvent($user, 'Authentication', 'Logged in'));

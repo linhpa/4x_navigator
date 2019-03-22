@@ -15,7 +15,8 @@
     <link href="{{ asset('/css/app.css') }}" rel="stylesheet">
     <link href="{{ asset('/css/imageviewer.css') }}" rel="stylesheet">
     <!-- <link href="{{ asset('/css/bootstrap.min.css') }}" rel="stylesheet"> -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">        
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">  
+    <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">    
 </head>
 @yield('css')
 <body>
@@ -33,9 +34,14 @@
                     </button>
 
                     <!-- Branding Image -->
-                    <a class="navbar-brand" href="{{ url('/home') }}">
-                        {{ config('app.name', 'Laravel') }}
-                    </a>
+                    <div id="brand-container" style="display: inline-block; margin-top: 5px">
+                        <a class="navbar-brand" href="{{ url('/home') }}">
+                            {{ config('app.name', 'Laravel') }}
+                        </a>
+                        @if (!Auth::guest())
+                        <input id="toggle-availability" type="checkbox" @if (Auth::user()->getAvailability() == 1) checked @endif data-toggle="toggle">
+                        @endif
+                    </div>
                 </div>
 
                 <div class="collapse navbar-collapse" id="app-navbar-collapse">
@@ -87,10 +93,27 @@
     </div>
 
     <!-- Scripts -->    
-    <script src="{{ asset('/js/app.js') }}"></script>    
+    <script src="{{ asset('/js/app.js') }}"></script> 
+    <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>  
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDViaUZiCsi7LfCkwkdpLRT4AmWzWP9CnM&libraries=places,geometry&callback=initAutocomplete" async defer></script>
     <script type="text/javascript">
         var initAutocomplete = function () {}
+
+        $('#toggle-availability').on('change', (e) => {
+            let data = {
+                _token: "{{ csrf_token() }}",
+                availability : $('#toggle-availability').prop('checked') ? 1 : 0
+            }
+
+            $.ajax({
+                method: "POST",
+                url: "{{ url('setUsersAvailability') }}",
+                data: data,
+                success: (e) => {
+                    console.log(e)
+                }
+            })
+        })
     </script>
     <script type="text/javascript">
         var _apiGeolocationSuccess = function(position) {

@@ -1,7 +1,11 @@
 @extends('layouts.app')
 
 @section('css')
-
+<style type="text/css">
+  .uper {
+    margin: 20px;
+  }
+</style>
 @endsection
 
 @section('content')

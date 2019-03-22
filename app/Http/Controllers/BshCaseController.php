@@ -33,7 +33,7 @@ class BshCaseController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request)
-    {        
+    {
         $statuses = $this->STATUSES;
 
         if (Auth::user()->role == 'admin') {
@@ -117,7 +117,7 @@ class BshCaseController extends Controller
         ];
 
         try {
-            $response = $client->post(config('api_4x') . 'saveNewCase', [
+            $response = $client->post(config('app.api_4x') . 'saveNewCase', [
                 'form_params' => $data
             ]);    
 
@@ -346,7 +346,7 @@ class BshCaseController extends Controller
     protected function callApiSendLocation($data) {
         $client = new Client();
 
-        $response = $client->post(config('api_4x') . 'pushGDVLocation', [
+        $response = $client->post(config('app.api_4x') . 'pushGDVLocation', [
             'form_params' => $data
         ]);
 
@@ -354,7 +354,7 @@ class BshCaseController extends Controller
 
         // $curl = curl_init();
         // curl_setopt_array($curl, array(
-        //     CURLOPT_URL => config('api_4x') . 'pushGDVLocation',
+        //     CURLOPT_URL => config('app.api_4x') . 'pushGDVLocation',
         //     CURLOPT_RETURNTRANSFER => true,
         //     CURLOPT_ENCODING => "",
         //     CURLOPT_MAXREDIRS => 10,
@@ -406,7 +406,7 @@ class BshCaseController extends Controller
     protected function pushNoti($data) {
         $client = new Client();
 
-        $response = $client->post(config('api_4x') . 'pushNoti', [
+        $response = $client->post(config('app.api_4x') . 'pushNoti', [
             'form_params' => $data
         ]);
 
@@ -438,7 +438,7 @@ class BshCaseController extends Controller
 
         $client = new Client();
 
-        $response = $client->post(config('api_4x') . 'saveDoneCase', [
+        $response = $client->post(config('app.api_4x') . 'saveDoneCase', [
             'form_params' => $data
         ]);
 
@@ -456,7 +456,7 @@ class BshCaseController extends Controller
             try {
                 $client = new Client();            
 
-                $response = $client->post(config('api_4x') . 'getGDVLocation', [
+                $response = $client->post(config('app.api_4x') . 'getGDVLocation', [
                     'form_params' => $data
                 ]);                
             } catch (RequestException $e) {                

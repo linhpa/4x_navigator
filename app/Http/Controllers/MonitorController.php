@@ -14,11 +14,21 @@ class MonitorController extends Controller
     }
 
     public function index() {
-    	$loggedIds = $this->loggedUsers('users:*');
+    	$loggedUsers = $this->loggedUsers('users:*');
+    	$availableIds = [];
+    	$loggedIds = [];
+
+    	foreach ($loggedUsers as $key => $value) {
+    		if ($value == 1) {
+    			$availableIds[] = substr($key, 6);
+    		}
+
+    		$loggedIds[] = substr($key, 6);
+    	}
 
 		$users = User::paginate(10);
 
-    	return view('monitor.index', compact('users', 'loggedIds'));
+    	return view('monitor.index', compact('users', 'loggedIds', 'availableIds'));
     }
 
     protected function loggedUsers($pattern, $cursor = null, $allResults=array())
@@ -28,8 +38,8 @@ class MonitorController extends Controller
 	        $users = array();
 
 	        foreach($allResults as $result){
-	            $user = User::where('id', Redis::Get($result))->first();
-	            $users[] = $user->id;
+	            $user = User::where('id', substr($result, 6))->first();
+	            $users[$result] = Redis::get($result);
 	        }
 	        return $users;
 	    }

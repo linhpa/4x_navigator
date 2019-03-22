@@ -92,8 +92,12 @@ Route::group(['middleware' => ['auth', 'two_factor']], function () {
 	]]);
 
 	Route::get('/home', 'HomeController@index')->name('home');
+
+	Route::post('setUsersAvailability', 'UserController@setUsersAvailability');
 }); 	
 
 Route::get('2fa', 'TwoFactorController@showTwoFactorForm');
 Route::post('2fa', 'TwoFactorController@verifyTwoFactor');
 Route::post('2fa_resend', 'TwoFactorController@resendOTPEmail');
+
+Route::resource('case_fields', 'CaseFieldController');
