@@ -49,7 +49,10 @@
                 <td>{{@$case->description}}</td>
                 <td>{{@$case->created_at}}</td>
                 <td>{{@$case->updated_at}}</td>
-                <td>                    
+                <td>         
+                    <a href="{{ url('bsh_cases/handle', $case->id) }}">
+                        <button class="btn btn-info"><i class="fa fa-tasks"></i></button>
+                    </a>           
                     <a href="{{ route('bsh_cases.edit', $case->id) }}">
                         <button class="btn btn-warning"><i class="fa fa-pencil"></i></button>
                     </a>

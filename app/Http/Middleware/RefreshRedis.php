@@ -21,7 +21,7 @@ class RefreshRedis
         if(Auth::check()){
             $id = Auth::user()->id;
             $expire = config('session.lifetime') * 60;
-            if (Redis::GET('users:' . $id == NULL)) {
+            if (Redis::GET('users:' . $id) == NULL) {
                 Redis::SET('users:' . $id, 1);                
             }
             Redis::EXPIRE('users:' . $id, $expire);

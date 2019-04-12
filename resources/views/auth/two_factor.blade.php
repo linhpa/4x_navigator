@@ -34,7 +34,7 @@
 			                            {{ session('success') }}
 			                        </div>
 			                    @endif
-								<form role="form" method="POST" action="/2fa">
+								<form role="form" method="POST" action="{{ url('2fa') }}">
 									{{ csrf_field() }}
 									<div class="form-group {{ $errors->has('email') ? 'has-error' : '' }}">
 										<input id="2fa" type="text" class="form-control center-block" name="2fa" required autofocus style="width: 100px; text-align: center; font-size: 22px" autocomplete="off" maxlength="5">

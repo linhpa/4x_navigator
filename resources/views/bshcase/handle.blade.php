@@ -233,7 +233,7 @@
                     <div class="col-xs-12 col-md-12">
                         <div id="map" style="width: 100%; height: 400px"></div>
                         <div id="infowindow-content">
-                          <img src="" width="16" height="16" id="place-icon">
+                          <!-- <img src="" width="16" height="16" id="place-icon"> -->
                           <span id="place-name"  class="title"></span><br>
                           <span id="place-address"></span>
                         </div>
