@@ -43,7 +43,11 @@
           <div class="form-group">
               <label for="customer_phone">Customer phone number:</label>
               <input type="text" class="form-control text-form-input" name="customer_phone"/>
-          </div>          
+          </div>
+            <!-- <div id="pac-container">
+                <input id="pac-input" name="position2"  class="k-textbox controls"
+                      placeholder="Enter a location" style="width: 100%" autocomplete="off">
+            </div> -->
           <button type="submit" class="btn btn-primary">Add</button>
       </form>
       <a href="{{ route('bsh_cases.index') }}" style="display: inline;"><button class="btn">Exit</button></a>

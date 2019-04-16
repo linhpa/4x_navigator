@@ -799,24 +799,24 @@ if ("{{ !Auth::guest() }}" == "1") {
 }   
 @endif  
 
-// $.post({
-//     url: '{{ url('bsh_cases/getGDVLocation') }}',
-//     dataType: 'json',
-//     data: {
-//         _token: '{{ csrf_token() }}',
-//         gdv_id: '{{ @$case->user->gdv_id }}',            
-//     },
-//     success: (data) => {
-//         if (data.data) {
-//             let position = data.data.position
-//             apiGeolocationSuccess(position)
-//             checkDistance(position.coords.latitude, position.coords.longitude)
-//         }
-//     },
-//     error: (xhr) => {
-//         console.log('Error')
-//     }
-// })
+$.post({
+    url: '{{ url('bsh_cases/getGDVLocation') }}',
+    dataType: 'json',
+    data: {
+        _token: '{{ csrf_token() }}',
+        gdv_id: '{{ @$case->user->gdv_id }}',            
+    },
+    success: (data) => {
+        if (data.data) {
+            let position = data.data.position
+            apiGeolocationSuccess(position)
+            checkDistance(position.coords.latitude, position.coords.longitude)
+        }
+    },
+    error: (xhr) => {
+        console.log('Error')
+    }
+})
 
 function getGDVLocation() {
     $.post({
