@@ -221,13 +221,13 @@ class BshCaseController extends Controller
             ]);    
         }
 
-        $notiData = [
-            'secret_key' => Config::getSecretKey(),
-            'gdv_id' => $request->input('gdv_id'),
-            'body' => $request->input('address1')
-        ];
+        // $notiData = [
+        //     'secret_key' => Config::getSecretKey(),
+        //     'gdv_id' => $request->input('gdv_id'),
+        //     'body' => $request->input('address1')
+        // ];
 
-        $this->pushNoti($notiData);
+        //$this->pushNoti($notiData);
         
         return response()->json(['result' => $result]);
     }
