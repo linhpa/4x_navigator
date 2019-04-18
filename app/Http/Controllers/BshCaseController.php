@@ -42,6 +42,7 @@ class BshCaseController extends Controller
             } else {
                 $cases = BshCase::whereRaw('1')->orderBy('status', 'asc')->orderBy('updated_at', 'desc')->paginate(10);    
             }
+            $cases->withPath('bsh_cases');
 
             return view('bshcase.index_admin', compact('cases', 'statuses'));
         } else {
@@ -51,7 +52,8 @@ class BshCaseController extends Controller
                 $cases = BshCase::where('user_id', Auth::user()->id)->orderBy('status', 'asc')->orderBy('updated_at', 'desc')->paginate(10);
             }
         }        
-
+        $cases->withPath('bsh_cases');
+        
         return view('bshcase.index', compact('cases', 'statuses'));
     }
 
