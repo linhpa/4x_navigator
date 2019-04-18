@@ -53,7 +53,7 @@ class BshCaseController extends Controller
             }
         }        
         $cases->withPath('bsh_cases');
-        
+
         return view('bshcase.index', compact('cases', 'statuses'));
     }
 
@@ -80,12 +80,12 @@ class BshCaseController extends Controller
             'customer_phone' => $request->input('customer_phone'),
             'user_id' => Auth::user()->id,
             //'case_id' => $request->input('case_id'),
-            'lat1' => $request->input('lat1'),
-            'lng1' => $request->input('lng1'),
-            'address1' => $request->input('address1'),
-            'lat2' => $request->input('lat2'),
-            'lng2' => $request->input('lng2'),
-            'address2' => $request->input('address2'),
+            'lat1' => $request->input('lat'),
+            'lng1' => $request->input('lng'),
+            'address1' => $request->input('address'),
+            'lat2' => $request->input('lat'),
+            'lng2' => $request->input('lng'),
+            'address2' => $request->input('address'),
             'description' => $request->input('description')
         ]);
 
@@ -109,6 +109,12 @@ class BshCaseController extends Controller
 
         $client = new Client();
 
+        $position2 = [
+            'lat' => $case->lat2,
+            'lng' => $case->lng2,
+            'address' => $case->address2
+        ];
+
         $data = [
             'case_id' => $case->id,
             'gdv_id' => $case->user->gdv_id,
@@ -116,6 +122,7 @@ class BshCaseController extends Controller
             'customer_name' => $case->customer_name,
             'description' => $case->description,
             'secret_key' => Config::getSecretKey(),
+            'position2' => $position2
         ];
 
         try {
